@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  api_gateway:
+    build: ./api_gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - service_users
+      - service_orders
+    networks:
+      - bmanager_network
+
+  service_users:
+    build: ./service_users
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./service_users/users.db:/app/users.db
+    networks:
+      - bmanager_network
+
+  service_orders:
+    build: ./service_orders
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./service_orders/orders.db:/app/orders.db
+    networks:
+      - bmanager_network
+
+networks:
+  bmanager_network:
+    driver: bridge
+
+volumes:
+  users_db:
+  orders_db:
